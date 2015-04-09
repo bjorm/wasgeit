@@ -1,12 +1,12 @@
 import feedparser
+import re
+import locale
+import urllib.request
 from concurrent import futures
 from datetime import date, datetime
 from collections import defaultdict
-import locale
-import re
 from pyquery import PyQuery as pq
 from lxml import html
-import urllib.request
 
 
 class VenueCrawler(object):
@@ -26,6 +26,11 @@ class VenueCrawler(object):
     def consume(self, data):
         pass
 
+    def add_event(self, event):
+        if event['date'] >= date.today():
+            date_str = event['date'].isoformat()
+            self.entries[date_str].append(event)
+
 
 class RssCrawler(VenueCrawler):
     def __init__(self):
@@ -36,10 +41,10 @@ class RssCrawler(VenueCrawler):
             event_date = self._extract_date(entry)
             if event_date is not None:
                 event = self._create_event(entry, event_date)
-                self.entries[event_date.isoformat()].append(event)
+                self.add_event(event)
 
     def _create_event(self, rss_entry, d):
-        return {'date': d.isoformat(), 'title': rss_entry.title, 'link': rss_entry.link, 'venue': self.name}
+        return {'date': d, 'title': rss_entry.title, 'link': rss_entry.link, 'venue': self.name}
 
     def _extract_date(self, rss_entry):
         time_struct = rss_entry['published_parsed']
@@ -81,11 +86,11 @@ class KairoCrawler(HtmlCrawler):
             title = (pq(article).find("h1").text())
             url = self._build_url(pq(article).attr['id'])
             if event_date is not None:
-                self.entries[event_date].append({'title': title, 'date': event_date, 'venue': self.name, 'link': url})
+                self.add_event({'title': title, 'date': event_date, 'venue': self.name, 'link': url})
 
     def _parse_date(self, date_str):
         try:
-            return datetime.strptime(date_str, '%d.%m.%Y').date().isoformat()
+            return datetime.strptime(date_str, '%d.%m.%Y').date()
         except ValueError as exc:
             print(exc)
             return None
