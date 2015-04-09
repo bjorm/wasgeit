@@ -10,7 +10,9 @@
   "license": "MIT",
   "devDependencies": {
     "expose-loader": "^0.6.0",
-    "jsx-loader": "^0.13.1",
+    "jsx-loader": "^0.13.1"
+  },
+  "dependencies": {
     "lodash": "^3.6.0",
     "react": "^0.13.1",
     "restful.js": "^0.6.1"
