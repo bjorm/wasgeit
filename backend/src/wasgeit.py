@@ -4,9 +4,12 @@ from datetime import date, datetime
 from collections import defaultdict
 import locale
 import re
+from pyquery import PyQuery as pq
+from lxml import html
+import urllib.request
 
 
-class Venue(object):
+class VenueCrawler(object):
     def __init__(self):
         self.id = None
         self.file = None
@@ -24,7 +27,7 @@ class Venue(object):
         pass
 
 
-class VenueWithRssFeed(Venue):
+class RssCrawler(VenueCrawler):
     def __init__(self):
         super().__init__()
 
@@ -46,7 +49,52 @@ class VenueWithRssFeed(Venue):
         return executor.submit(feedparser.parse, self.file)
 
 
-class ISC(VenueWithRssFeed):
+class HtmlCrawler(VenueCrawler):
+    def __init__(self):
+        super().__init__()
+        self.timeout = 60
+
+    def load_url(self, url):
+        return urllib.request.urlopen(url, timeout=self.timeout).read()
+
+    def get_future(self, executor):
+        return executor.submit(self.load_url, self.url)
+
+    def consume(self, data):
+        d = pq(html.fromstring(data))
+        self._analyze_dom(d)
+
+    def _analyze_dom(self, d):
+        return {}
+
+
+class KairoCrawler(HtmlCrawler):
+    def __init__(self):
+        super().__init__()
+        self.id = 3
+        self.url = "http://www.cafe-kairo.ch/kultur"
+        self.name = "Cafe Kairo"
+
+    def _analyze_dom(self, d):
+        for article in d("article"):
+            event_date = self._parse_date(pq(article).find(".concerts_date time").text()[3:])
+            title = (pq(article).find("h1").text())
+            url = self._build_url(pq(article).attr['id'])
+            if event_date is not None:
+                self.entries[event_date].append({'title': title, 'date': event_date, 'venue': self.name, 'link': url})
+
+    def _parse_date(self, date_str):
+        try:
+            return datetime.strptime(date_str, '%d.%m.%Y').date().isoformat()
+        except ValueError as exc:
+            print(exc)
+            return None
+
+    def _build_url(self, node_id):
+        return "{}#{}".format(self.url, node_id)
+
+
+class ISCCrawler(RssCrawler):
     def __init__(self):
         super().__init__()
         self.id = 1
@@ -55,7 +103,8 @@ class ISC(VenueWithRssFeed):
         self.name = "ISC"
 
     def _extract_date(self, rss_entry):
-        result = re.search("[a-zA-Z]{2} ([0-9]{1,2}\. [a-zA-Z]+ [0-9]{4} \| [0-9]{2}[\.:][0-9]{2})", rss_entry.content[0].value)
+        pattern = "[a-zA-Z]{2} ([0-9]{1,2}\. [a-zA-Z]+ [0-9]{4} \| [0-9]{2}[\.:][0-9]{2})"
+        result = re.search(pattern, rss_entry.content[0].value)
 
         if result is None:
             print("No date found in '{}'".format(rss_entry.content[0].value))
@@ -71,7 +120,7 @@ class ISC(VenueWithRssFeed):
                 return None
 
 
-class Dachstock(VenueWithRssFeed):
+class DachstockCrawler(RssCrawler):
     def __init__(self):
         super().__init__()
         self.id = 2
@@ -82,7 +131,7 @@ class Dachstock(VenueWithRssFeed):
 
 class Agenda(object):
     def __init__(self):
-        self._venues = [ISC(), Dachstock()]
+        self._venues = [ISCCrawler(), DachstockCrawler(), KairoCrawler()]
         self.agenda = self._load_events_from_venues()
 
     def get(self):
@@ -97,10 +146,10 @@ class Agenda(object):
                 venue = future_to_venue[future]
                 try:
                     data = future.result()
-                except Exception as exc:
-                    print('%r generated an exception: %s' % (venue, exc))
-                else:
                     venue.consume(data)
+                except Exception as exc:
+                    print('{} generated an exception: {}'.format(venue, exc))
+                else:
                     for (event_date, events) in venue.get_events().items():
                         agenda[event_date].extend(events)
 

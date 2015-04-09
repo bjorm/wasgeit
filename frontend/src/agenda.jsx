@@ -17,7 +17,7 @@ var Agenda = React.createClass({
 var Event = React.createClass({
     render: function() {
         var event = this.props.event;
-        return (<li>{event.venue}: {event.title}, <a href={event.link}>link</a></li>);
+        return (<li>{event.venue}: {event.title}, <a href={event.link}>Link</a></li>);
     }
 });
 
@@ -37,6 +37,5 @@ var Day = React.createClass({
 });
 
 api.all('rest/agenda').getAll().then(function(response) {
-    console.log(response.body().data());
     React.render(<Agenda events={response.body().data()} />, document.getElementById("agenda"));
 });
