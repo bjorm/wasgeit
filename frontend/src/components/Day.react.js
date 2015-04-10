@@ -1,7 +1,7 @@
 var React = require('react');
 var _ = require('lodash');
 
-var Event = require('./event');
+var Event = require('./Event.react');
 
 var Day = React.createClass({
     render: function() {

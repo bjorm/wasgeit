@@ -1,5 +1,5 @@
 module.exports = {
-    entry: './src/index.jsx',
+    entry: './src/index.react.js',
     output: {
         path: __dirname + '/src',
         filename: 'bundle.js'
@@ -7,13 +7,11 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.css$/, loader: 'style!css' },
-            { test: /\.jsx$/, loader: 'jsx-loader?harmony' },
-            { test: /\.es6$/, loader: 'babel-loader' }
+            { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
         ]
     },
     resolve: {
-        // Allow require('./blah') to require blah.jsx
-        extensions: ['', '.js', '.jsx', '.es6']
+        extensions: ['', '.js']
     },
     devServer: {
         proxy: {

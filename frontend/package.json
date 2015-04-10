@@ -17,6 +17,7 @@
     "webpack": "^1.8.4"
   },
   "dependencies": {
+    "flux": "^2.0.1",
     "lodash": "^3.6.0",
     "react": "^0.13.1",
     "restful.js": "^0.6.1"

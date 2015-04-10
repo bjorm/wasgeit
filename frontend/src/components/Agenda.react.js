@@ -1,18 +1,17 @@
 var React = require('react');
 var _ = require('lodash');
-var agendaService = require('../agenda-service');
-var Day = require('./day');
+
+var eventStore = require('../stores/EventStore');
+var Day = require('./Day.react');
 
 var Agenda = React.createClass({
     getInitialState: function() {
         return { events: {} }
     },
     componentDidMount: function() {
-        agendaService.getAll().then(function(events) {
+        eventStore.getAll().then(function(events) {
             if (this.isMounted()) {
-                this.setState({
-                    events: events
-                });
+                this.setState({ events: events });
             }
         }.bind(this));
     },
