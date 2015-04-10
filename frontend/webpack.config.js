@@ -8,7 +8,7 @@ module.exports = {
         loaders: [
             { test: /\.css$/, loader: 'style!css' },
             { test: /\.jsx$/, loader: 'jsx-loader?harmony' },
-            { test: /\.es6/, loader: 'babel-loader' }
+            { test: /\.es6$/, loader: 'babel-loader' }
         ]
     },
     resolve: {
