@@ -1,6 +1,7 @@
 {
   "settings": {
     "ecmascript": 6,
-    "jsx": true
+    "jsx": true,
+    "quotes": [1, "single"]
   }
 }
