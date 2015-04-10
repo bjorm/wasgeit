@@ -1,18 +1,16 @@
 var React = require('react');
-var restful = require('restful.js');
 var _ = require('lodash');
-
-var api = restful('localhost:8080');
+var agendaService = require('./agenda-service');
 
 var Agenda = React.createClass({
     getInitialState: function() {
         return { events: {} }
     },
     componentDidMount: function() {
-        api.all('rest/agenda').getAll().then(function(response) {
+        agendaService.getAll().then(function(events) {
             if (this.isMounted()) {
                 this.setState({
-                    events: response.body().data()
+                    events: events
                 });
             }
         }.bind(this));
