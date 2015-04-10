@@ -10,7 +10,7 @@ class Agenda(object):
         self._venues = [ISCCrawler(), DachstockCrawler(), KairoCrawler()]
         self._crawl_venues()
 
-    def get(self, venue_ids):
+    def get_events(self, venue_ids):
         agenda = defaultdict(list)
 
         if len(venue_ids) == 0:
@@ -21,6 +21,9 @@ class Agenda(object):
                 agenda[event_date].extend(events)
 
         return agenda
+
+    def get_venues(self):
+        return [{'id': venue.id, 'name': venue.name} for venue in self._venues]
 
     def _crawl_venues(self):
         with futures.ThreadPoolExecutor(max_workers=5) as executor:
