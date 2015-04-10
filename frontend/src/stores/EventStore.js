@@ -54,6 +54,7 @@ AppDispatcher.register(function(action) {
         eventStore.emitChange();
     } else if (action.actionType === Actions.EVENTS_LOADED) {
         allEvents = action.events;
+        visibleEvents = filterEvents();
         eventStore.emitChange();
     }
 });

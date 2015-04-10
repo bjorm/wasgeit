@@ -46,6 +46,8 @@ venueStore.dispatchToken = AppDispatcher.register(function(action) {
         venueStore.emitChange();
     } else if (action.actionType === Actions.VENUES_LOADED) {
         venues = action.venues;
+        selectedVenueIds = _.pluck(venues, 'name');
+        console.log(selectedVenueIds);
         venueStore.emitChange();
     }
 });
