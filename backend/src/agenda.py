@@ -8,14 +8,21 @@ from crawler.html import *
 class Agenda(object):
     def __init__(self):
         self._venues = [ISCCrawler(), DachstockCrawler(), KairoCrawler()]
-        self.agenda = self._load_events_from_venues()
+        self._crawl_venues()
 
-    def get(self):
-        return self.agenda
-
-    def _load_events_from_venues(self):
+    def get(self, venue_ids):
         agenda = defaultdict(list)
 
+        if len(venue_ids) == 0:
+            venue_ids = {venue.id for venue in self._venues}
+
+        for venue in [venue for venue in self._venues if venue.id in venue_ids]:
+            for (event_date, events) in venue.get_events().items():
+                agenda[event_date].extend(events)
+
+        return agenda
+
+    def _crawl_venues(self):
         with futures.ThreadPoolExecutor(max_workers=5) as executor:
             future_to_venue = {_venue.get_future(executor): _venue for _venue in self._venues}
             for future in futures.as_completed(future_to_venue):
@@ -25,8 +32,3 @@ class Agenda(object):
                     venue.consume(data)
                 except Exception as exc:
                     print('{} generated an exception: {}'.format(venue, exc))
-                else:
-                    for (event_date, events) in venue.get_events().items():
-                        agenda[event_date].extend(events)
-
-        return agenda

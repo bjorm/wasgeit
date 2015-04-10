@@ -1,10 +1,9 @@
 import datetime
-from flask import Flask, json
-from flask.json import JSONEncoder
+from flask import Flask, json, request
 from agenda import Agenda
 
 
-class CustomJSONEncoder(JSONEncoder):
+class CustomJSONEncoder(json.JSONEncoder):
     def default(self, obj):
         try:
             if isinstance(obj, datetime.date):
@@ -16,7 +15,7 @@ class CustomJSONEncoder(JSONEncoder):
         else:
             return list(iterable)
 
-        return JSONEncoder.default(self, obj)
+        return json.JSONEncoder.default(self, obj)
 
 
 app = Flask(__name__)
@@ -26,7 +25,10 @@ agenda = Agenda()
 
 @app.route("/rest/agenda")
 def hello():
-    return json.dumps(agenda.get())
+    venue_ids_str = request.args.get('venues', '')
+    venue_ids = set() if len(venue_ids_str) == 0 else {int(id_str) for id_str in venue_ids_str.split(',')}
+
+    return json.dumps(agenda.get(venue_ids))
 
 if __name__ == "__main__":
     app.run(debug=True)
