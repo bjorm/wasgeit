@@ -1,17 +1,18 @@
 var React = require('react');
 var VenueStore = require('../stores/VenueStore');
 var Venue = require('./Venue.react');
+var VenueActions = require('../actions/VenueActions');
 
 var VenueList = React.createClass({
     getInitialState: function() {
-        return { venues: [] };
+        return VenueStore.getState();
     },
     componentDidMount: function() {
-        VenueStore.getAll().then(function(venues) {
-            if (this.isMounted()) {
-                this.setState({ venues: venues});
-            }
-        }.bind(this));
+        VenueStore.addChangeListener(this._onChange);
+        VenueActions.loadVenues();
+    },
+    componentWillUnmount: function() {
+        VenueStore.removeChangeListener(this._onChange);
     },
     render: function() {
         var venues = [];
@@ -19,6 +20,9 @@ var VenueList = React.createClass({
             venues.push(<Venue venue={venue} />);
         });
         return (<div>Select venues: <ul>{venues}</ul></div>);
+    },
+    _onChange: function() {
+        this.setState(VenueStore.getState());
     }
 });
 

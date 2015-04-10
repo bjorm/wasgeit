@@ -1,19 +1,20 @@
 var React = require('react');
 var _ = require('lodash');
 
-var eventStore = require('../stores/EventStore');
+var EventStore = require('../stores/EventStore');
+var EventActions = require('../actions/EventActions');
 var Day = require('./Day.react');
 
 var Agenda = React.createClass({
     getInitialState: function() {
-        return { events: {} }
+        return EventStore.getState();
     },
     componentDidMount: function() {
-        eventStore.getAll().then(function(events) {
-            if (this.isMounted()) {
-                this.setState({ events: events });
-            }
-        }.bind(this));
+        EventStore.addChangeListener(this.onChange);
+        EventActions.loadEvents();
+    },
+    componentWillUnmount: () => {
+        EventStore.removeChangeListener(this.onChange);
     },
     render: function() {
         var days = [];
@@ -21,6 +22,9 @@ var Agenda = React.createClass({
             days.push(<Day date={date} events={events} />);
         });
         return (<ol>{days}</ol>);
+    },
+    onChange: function() {
+        this.setState(EventStore.getState());
     }
 });
 
