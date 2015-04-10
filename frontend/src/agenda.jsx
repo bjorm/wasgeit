@@ -5,9 +5,21 @@ var _ = require('lodash');
 var api = restful('localhost:8080');
 
 var Agenda = React.createClass({
+    getInitialState: function() {
+        return { events: {} }
+    },
+    componentDidMount: function() {
+        api.all('rest/agenda').getAll().then(function(response) {
+            if (this.isMounted()) {
+                this.setState({
+                    events: response.body().data()
+                });
+            }
+        }.bind(this));
+    },
     render: function() {
         var days = [];
-        _.forOwn(this.props.events, function(events, date) {
+        _.forOwn(this.state.events, function(events, date) {
             days.push(<Day date={date} events={events} />);
         });
         return (<ol>{days}</ol>);
@@ -17,7 +29,7 @@ var Agenda = React.createClass({
 var Event = React.createClass({
     render: function() {
         var event = this.props.event;
-        return (<li>{event.venue}: {event.title}, <a href={event.link}>Link</a></li>);
+        return (<li>{event.venue}: <a href={event.link}>{event.title}</a></li>);
     }
 });
 
@@ -36,6 +48,4 @@ var Day = React.createClass({
     }
 });
 
-api.all('rest/agenda').getAll().then(function(response) {
-    React.render(<Agenda events={response.body().data()} />, document.getElementById("agenda"));
-});
+React.render(<Agenda/>, document.getElementById("agenda"));

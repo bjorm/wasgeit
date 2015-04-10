@@ -1,7 +1,7 @@
 import datetime
 from flask import Flask, json
 from flask.json import JSONEncoder
-from wasgeit import Agenda
+from agenda import Agenda
 
 
 class CustomJSONEncoder(JSONEncoder):
@@ -15,6 +15,7 @@ class CustomJSONEncoder(JSONEncoder):
             pass
         else:
             return list(iterable)
+
         return JSONEncoder.default(self, obj)
 
 
