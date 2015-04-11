@@ -3,11 +3,12 @@ from collections import defaultdict
 
 from crawler.rss import *
 from crawler.html import *
+from crawler.facebook import *
 
 
 class Agenda(object):
     def __init__(self):
-        self._venues = [ISCCrawler(), DachstockCrawler(), KairoCrawler()]
+        self._venues = [ISCCrawler(), DachstockCrawler(), KairoCrawler(), PlaygroundLoungeCrawler()]
         self._crawl_venues()
 
     def get_events(self, venue_ids):
