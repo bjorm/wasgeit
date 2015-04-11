@@ -10,7 +10,6 @@ class ISCCrawler(RssCrawler):
         super().__init__()
         self.id = 1
         self.url = "http://www.isc-club.ch/programm?rss"
-        self.file = "crawler/isc.xml"
         self.name = "ISC"
 
     def _extract_date(self, rss_entry):
@@ -36,7 +35,6 @@ class DachstockCrawler(RssCrawler):
         super().__init__()
         self.id = 2
         self.url = "http://www.dachstock.ch/rss.xml"
-        self.file = "crawler/dachstock.xml"
         self.name = "Dachstock"
 
 

@@ -111,5 +111,5 @@ class RssCrawler(VenueCrawler):
         return date(time_struct.tm_year, time_struct.tm_mon, time_struct.tm_mday)
 
     def get_future(self, executor):
-        return executor.submit(feedparser.parse, self.file)
+        return executor.submit(feedparser.parse, self.url)
 
