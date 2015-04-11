@@ -7,6 +7,7 @@ Minimalistic concert/event aggregator with web frontend
 - [Flux](http://facebook.github.io/flux/)
 - [webpack](http://webpack.github.io/)
 - [Babel ES6 transpiler](https://babeljs.io/)
+
 ##Backend
 - [Python 3](https://www.python.org/)
 - [Flask](http://flask.pocoo.org/)
