@@ -9,7 +9,6 @@ from crawler.base import HtmlCrawler
 class FacebookEventsCrawler(HtmlCrawler):
     def __init__(self):
         self.fb_page_url = None
-        self.event_page_postfix = "events?key=events"
         super().__init__()
 
     def consume(self, data):
@@ -33,9 +32,22 @@ class FacebookEventsCrawler(HtmlCrawler):
 class PlaygroundLoungeCrawler(FacebookEventsCrawler):
     def __init__(self):
         super().__init__()
-        self.fb_page_url = "https://www.facebook.com/playgroundlounge"
-        self.url = "{}/{}".format(self.fb_page_url, self.event_page_postfix)
+        self.url = "https://www.facebook.com/playgroundlounge/events?key=events"
         self.id = 4
         self.name = "Playground Lounge"
 
 
+class BrasserieLorraineCrawler(FacebookEventsCrawler):
+    def __init__(self):
+        super().__init__()
+        self.url = "https://www.facebook.com/pages/Genossenschaft-Restaurant-Brasserie-Lorraine/106714019391041?sk=events&ref=page_internal"
+        self.id = 5
+        self.name = "Brasserie Lorraine"
+
+
+class DeanWakeCrawler(FacebookEventsCrawler):
+    def __init__(self):
+        super().__init__()
+        self.url = "https://www.facebook.com/pages/Dean-Wake/113178252085227?sk=events&key=events"
+        self.id = 6
+        self.name = "Dean Wake"

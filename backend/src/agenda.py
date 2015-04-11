@@ -8,7 +8,7 @@ from crawler.facebook import *
 
 class Agenda(object):
     def __init__(self):
-        self._venues = [ISCCrawler(), DachstockCrawler(), KairoCrawler(), PlaygroundLoungeCrawler()]
+        self._venues = [ISCCrawler(), DachstockCrawler(), KairoCrawler(), PlaygroundLoungeCrawler(), BrasserieLorraineCrawler(), DeanWakeCrawler()]
         self._crawl_venues()
 
     def get_events(self, venue_ids):
