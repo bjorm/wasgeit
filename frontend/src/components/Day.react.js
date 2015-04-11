@@ -12,7 +12,7 @@ var Day = React.createClass({
         return (
             <li>
                 <h2>
-                    <time className={'fw-700'} date="{this.props.date}">{this.props.date}</time>’
+                    <time className={'fw-700'} date="{this.props.date}">{this.props.date}</time>
                 </h2>
                 <ul className={'unstyled'}>{events}</ul>
             </li>

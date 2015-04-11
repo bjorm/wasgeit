@@ -8,7 +8,7 @@ var Event = React.createClass({
             <li>
                 <span className={'ink-label grey'}>{event.venue}</span>
                 &nbsp;
-                <a href={event.link}>{event.title}</a>
+                <a href={event.link} rel="external">{event.title}</a>
             </li>
         );
     }
