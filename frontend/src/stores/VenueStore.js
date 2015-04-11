@@ -4,7 +4,6 @@ import _ from 'lodash';
 import EventEmitter from 'events';
 
 var venues = [];
-var selectedVenueIds = [];
 var CHANGE_EVENT = 'change';
 
 class VenueStore extends EventEmitter {
@@ -17,7 +16,7 @@ class VenueStore extends EventEmitter {
     }
 
     getSelectedVenues() {
-        return selectedVenueIds;
+        return _.pluck(_.where(venues, { selected: true }), 'name');
     }
 
     emitChange() {
@@ -38,16 +37,13 @@ var venueStore = new VenueStore();
 venueStore.dispatchToken = AppDispatcher.register(function(action) {
 
     if (action.actionType === Actions.VENUE_CLICKED) {
-        if (_.includes(selectedVenueIds, action.id)) {
-            selectedVenueIds = _.without(selectedVenueIds, action.id);
-        } else {
-            selectedVenueIds.push(action.id);
+        var clickedVenue = _.find(venues, 'name', action.id);
+        if (clickedVenue) {
+            clickedVenue.selected = !clickedVenue.selected;
+            venueStore.emitChange();
         }
-        venueStore.emitChange();
     } else if (action.actionType === Actions.VENUES_LOADED) {
-        venues = action.venues;
-        selectedVenueIds = _.pluck(venues, 'name');
-        console.log(selectedVenueIds);
+        venues = action.venues.map((venue) => { return _.defaults(venue, { selected: true }); });
         venueStore.emitChange();
     }
 });

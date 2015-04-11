@@ -6,6 +6,11 @@ export default class Venue extends React.Component {
         VenueActions.venueClicked(this.props.venue.name);
     }
     render() {
-        return (<li onClick={this._onClick.bind(this)}>{this.props.venue.name}</li>);
+        var style = this.props.venue.selected ? 'active' : '';
+        return (
+            <li className={style} onClick={this._onClick.bind(this)}>
+                <a href="#">{this.props.venue.name}</a>
+            </li>
+        );
     }
 }
