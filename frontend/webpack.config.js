@@ -1,3 +1,4 @@
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
     entry: './src/index.react.js',
     output: {
@@ -6,7 +7,7 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.less$/, loader: 'style!css!less' },
+            { test: /\.less$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader") },
             { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
         ]
     },
@@ -17,5 +18,8 @@ module.exports = {
         proxy: {
             '/rest/*': 'http://localhost:5000'
         }
-    }
+    },
+    plugins: [
+        new ExtractTextPlugin("style.css")
+    ]
 };
