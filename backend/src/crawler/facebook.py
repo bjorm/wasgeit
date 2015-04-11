@@ -33,4 +33,18 @@ class TurnhalleCrawler(FacebookEventsCrawler):
         self.name = "Turnhalle"
 
 
-crawlers = [PlaygroundLoungeCrawler(), BrasserieLorraineCrawler(), DeanWakeCrawler(), TurnhalleCrawler()]
+class KofmehlCrawler(FacebookEventsCrawler):
+    def __init__(self):
+        super().__init__()
+        self.url = "https://www.facebook.com/tschieh/events?ref=page_internal"
+        self.id = 8
+        self.name = "Kofmehl"
+
+
+crawlers = [
+    PlaygroundLoungeCrawler(),
+    BrasserieLorraineCrawler(),
+    DeanWakeCrawler(),
+    TurnhalleCrawler(),
+    KofmehlCrawler()
+]
