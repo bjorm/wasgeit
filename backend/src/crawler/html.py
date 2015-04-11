@@ -1,5 +1,6 @@
-from pyquery import PyQuery as Pq
 from datetime import datetime
+
+from pyquery import PyQuery as Pq
 
 from crawler.base import HtmlCrawler
 
@@ -17,9 +18,10 @@ class KairoCrawler(HtmlCrawler):
             title = Pq(article).find("h1").text()
             url = self._build_url(Pq(article).attr['id'])
             if event_date is not None:
-                self.add_event({'title': title, 'date': event_date, 'venue': self.name, 'link': url})
+                self.add_event({'title': title, 'date': event_date, 'link': url})
 
-    def _parse_date(self, date_str):
+    @staticmethod
+    def _parse_date(date_str):
         try:
             return datetime.strptime(date_str, '%d.%m.%Y').date()
         except ValueError as exc:
@@ -28,3 +30,6 @@ class KairoCrawler(HtmlCrawler):
 
     def _build_url(self, node_id):
         return "{}#{}".format(self.url, node_id)
+
+
+crawlers = [KairoCrawler()]

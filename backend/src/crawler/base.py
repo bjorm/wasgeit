@@ -1,13 +1,18 @@
 import urllib.request
-import feedparser
+from datetime import datetime
+
+import re
 from collections import defaultdict
 from datetime import date
+
+import feedparser
 from lxml import html
 from pyquery import PyQuery as Pq
 
 
 class VenueCrawler(object):
     def __init__(self):
+        # TODO push venue details into dict
         self.id = None
         self.file = None
         self.name = None
@@ -26,6 +31,7 @@ class VenueCrawler(object):
     def add_event(self, event):
         if event['date'] >= date.today():
             date_str = event['date'].isoformat()
+            event['venue'] = self.name
             self.entries[date_str].append(event)
 
 
@@ -41,11 +47,48 @@ class HtmlCrawler(VenueCrawler):
         return executor.submit(self.load_url, self.url)
 
     def consume(self, data):
+        # TODO naming
         d = Pq(html.fromstring(data))
         self._analyze_dom(d)
 
     def _analyze_dom(self, d):
         pass
+
+
+class FacebookEventsCrawler(HtmlCrawler):
+    def __init__(self):
+        super().__init__()
+
+    def consume(self, data):
+        # TODO clean up
+        hidden_markup = re.compile("<!-- (.*TimelineSection.*) -->")
+        match = re.search(hidden_markup, data.decode('utf-8'))
+        event_timeline = Pq(match.group(1))
+        self._analyze_dom(event_timeline)
+
+    def _analyze_dom(self, event_timeline):
+        # TODO clean up
+        event_items = [Pq(event) for event in event_timeline.find('table').filter(self.is_timeline_event)]
+        for event in event_items:
+            event_element = event.find('div > a[data-hovercard]')
+            title = event_element.text()
+            event_url_path_segment = event_element.attr['href']
+            day_month_str = event.find('td:first > div').text()
+            event_date = self._create_date(day_month_str)
+            link = self._create_link(event_url_path_segment)
+            self.add_event({'title': title, 'date': event_date.date(), 'link': link})
+
+    @staticmethod
+    def is_timeline_event(id, element):
+        return element.attrib.get('id', '').startswith('timeline_event_item')
+
+    @staticmethod
+    def _create_link(path):
+        return "{}{}".format("http://facebook.com", path)
+
+    @staticmethod
+    def _create_date(day_month_str):
+        return datetime.strptime('{} {}'.format(day_month_str, date.today().year), '%b %d %Y')
 
 
 class RssCrawler(VenueCrawler):
@@ -59,8 +102,9 @@ class RssCrawler(VenueCrawler):
                 event = self._create_event(entry, event_date)
                 self.add_event(event)
 
-    def _create_event(self, rss_entry, d):
-        return {'date': d, 'title': rss_entry.title, 'link': rss_entry.link, 'venue': self.name}
+    @staticmethod
+    def _create_event(rss_entry, d):
+        return {'date': d, 'title': rss_entry.title, 'link': rss_entry.link}
 
     def _extract_date(self, rss_entry):
         time_struct = rss_entry['published_parsed']
@@ -68,3 +112,4 @@ class RssCrawler(VenueCrawler):
 
     def get_future(self, executor):
         return executor.submit(feedparser.parse, self.file)
+

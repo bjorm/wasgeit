@@ -38,3 +38,6 @@ class DachstockCrawler(RssCrawler):
         self.url = "http://www.dachstock.ch/rss.xml"
         self.file = "crawler/dachstock.xml"
         self.name = "Dachstock"
+
+
+crawlers = [ISCCrawler(), DachstockCrawler()]
