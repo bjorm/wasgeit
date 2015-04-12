@@ -6,8 +6,9 @@ Minimalistic concert/event aggregator with web frontend
 ## Frontend
 - [React.js](https://facebook.github.io/react/)
 - [Flux](http://facebook.github.io/flux/)
-- [webpack](http://webpack.github.io/)
+- [Webpack](http://webpack.github.io/)
 - [Babel ES6 transpiler](https://babeljs.io/)
+- [Restul.js](https://github.com/marmelab/restful.js)Men
 
 ##Backend
 - [Python 3](https://www.python.org/)
