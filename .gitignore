@@ -2,3 +2,4 @@
 bundle.js
 node_modules
 .idea
+frontend/src/style.css

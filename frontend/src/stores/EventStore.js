@@ -8,7 +8,7 @@ var CHANGE_EVENT = 'change';
 
 var allEvents = {};
 var visibleEvents = {};
-
+// TODO do not use class, it's a singleton
 class EventStore extends EventEmitter {
     constructor() {
         super();

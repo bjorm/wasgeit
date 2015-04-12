@@ -6,6 +6,7 @@ import EventEmitter from 'events';
 var venues = [];
 var CHANGE_EVENT = 'change';
 
+// TODO do not use class, it's a singleton
 class VenueStore extends EventEmitter {
     constructor() {
         super();
