@@ -1,9 +1,9 @@
 import urllib.request
 from datetime import datetime
-
 import re
 from collections import defaultdict
 from datetime import date
+import locale
 
 import feedparser
 from lxml import html
@@ -88,6 +88,7 @@ class FacebookEventsCrawler(HtmlCrawler):
 
     @staticmethod
     def _create_date(day_month_str):
+        locale.setlocale(locale.LC_TIME, 'de_CH')
         return datetime.strptime('{} {}'.format(day_month_str, date.today().year), '%b %d %Y')
 
 
