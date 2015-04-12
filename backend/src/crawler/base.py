@@ -1,4 +1,4 @@
-import urllib.request
+import urllib
 from datetime import datetime
 import re
 from collections import defaultdict
@@ -44,7 +44,8 @@ class HtmlCrawler(VenueCrawler):
         return urllib.request.urlopen(url, timeout=self.timeout).read()
 
     def get_future(self, executor):
-        return executor.submit(self.load_url, self.url)
+        req = urllib.request.Request(self.url, headers={'Accept-Language': 'en-US,en;q=0.5'})
+        return executor.submit(self.load_url, req)
 
     def consume(self, data):
         # TODO naming
@@ -88,7 +89,7 @@ class FacebookEventsCrawler(HtmlCrawler):
 
     @staticmethod
     def _create_date(day_month_str):
-        locale.setlocale(locale.LC_TIME, 'de_CH')
+        locale.setlocale(locale.LC_TIME, 'en_US')
         return datetime.strptime('{} {}'.format(day_month_str, date.today().year), '%b %d %Y')
 
 

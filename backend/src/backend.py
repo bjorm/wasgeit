@@ -23,14 +23,14 @@ app.json_encoder = CustomJSONEncoder
 
 agenda = Agenda()
 
-@app.route("/rest/agenda")
+@app.route("/agenda")
 def get_agenda():
     venue_ids_str = request.args.get('venues', '')
     venue_ids = set() if len(venue_ids_str) == 0 else {int(id_str) for id_str in venue_ids_str.split(',')}
 
     return json.dumps(agenda.get_events(venue_ids))
 
-@app.route("/rest/venues")
+@app.route("/venues")
 def get_venues():
     return json.dumps(agenda.get_venues())
 
