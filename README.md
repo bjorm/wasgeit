@@ -1,5 +1,6 @@
 # wasgeit
 Minimalistic concert/event aggregator with web frontend
+![screenshot](doc/screenshot.png)
 
 # Tech stack
 ## Frontend
