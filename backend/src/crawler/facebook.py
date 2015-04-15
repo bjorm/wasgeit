@@ -54,5 +54,6 @@ crawlers = [
     BrasserieLorraineCrawler(),
     DeanWakeCrawler(),
     TurnhalleCrawler(),
-    KofmehlCrawler()
+    KofmehlCrawler(),
+    CoqDorCrawler()
 ]
