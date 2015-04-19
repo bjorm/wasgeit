@@ -49,11 +49,29 @@ class CoqDorCrawler(FacebookEventsCrawler):
         self.name = "Coq d'Or"
 
 
+class KiffCrawler(FacebookEventsCrawler):
+    def __init__(self):
+        super().__init__()
+        self.url = "https://www.facebook.com/kiffaarau/events?ref=page_internal"
+        self.id = 10
+        self.name = "KiFF"
+
+
+class FriSonCrawler(FacebookEventsCrawler):
+    def __init__(self):
+        super().__init__()
+        self.url = "https://www.facebook.com/frisonclub/events?ref=page_internal"
+        self.id = 11
+        self.name = "Fri-Son"
+
+
 crawlers = [
     PlaygroundLoungeCrawler(),
     BrasserieLorraineCrawler(),
     DeanWakeCrawler(),
     TurnhalleCrawler(),
     KofmehlCrawler(),
-    CoqDorCrawler()
+    CoqDorCrawler(),
+    KiffCrawler(),
+    FriSonCrawler()
 ]
