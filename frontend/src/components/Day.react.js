@@ -7,7 +7,7 @@ var Day = React.createClass({
     render: function() {
         var events = [];
         this.props.events.forEach(function(event) {
-            events.push(<Event event={event}/>)
+            events.push(<Event key={event.link} event={event}/>)
         });
         return (
             <li>

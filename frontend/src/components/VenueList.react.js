@@ -17,7 +17,7 @@ var VenueList = React.createClass({
     render: function() {
         var venues = [];
         this.state.venues.forEach((venue) => {
-            venues.push(<Venue venue={venue} />);
+            venues.push(<Venue key={venue.id} venue={venue} />);
         });
         return (<ul className={'nav nav-pills'}>{venues}</ul>);
     },

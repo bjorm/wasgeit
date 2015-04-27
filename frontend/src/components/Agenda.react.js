@@ -19,7 +19,7 @@ var Agenda = React.createClass({
     render: function() {
         var days = [];
         _.forOwn(this.state.events, function(events, date) {
-            days.push(<Day date={date} events={events} />);
+            days.push(<Day key={date} date={date} events={events} />);
         });
         return (<ol className={'list-unstyled'}>{days}</ol>);
     },
