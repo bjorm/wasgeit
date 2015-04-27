@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 cd frontend
 npm install
 
@@ -8,8 +9,7 @@ node node_modules/webpack/bin/webpack.js
 sudo systemctl stop httpd
 
 # install frontend
-cd src
-sudo cp bundle.js index.html style.css /var/www/html/wasgeit
+sudo cp target/* /var/www/html/wasgeit
 
 # install backend
 cd ../../backend/src

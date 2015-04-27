@@ -19,12 +19,7 @@ var VenueList = React.createClass({
         this.state.venues.forEach((venue) => {
             venues.push(<Venue venue={venue} />);
         });
-        return (
-            <nav className={'ink-navigation'}>
-                <ul className={'pills pagination'}>
-                    {venues}
-                </ul>
-            </nav>);
+        return (<ul className={'nav nav-pills'}>{venues}</ul>);
     },
     _onChange: function() {
         this.setState(VenueStore.getState());

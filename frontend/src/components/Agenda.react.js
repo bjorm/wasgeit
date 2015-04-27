@@ -21,7 +21,7 @@ var Agenda = React.createClass({
         _.forOwn(this.state.events, function(events, date) {
             days.push(<Day date={date} events={events} />);
         });
-        return (<ol>{days}</ol>);
+        return (<ol className={'list-unstyled'}>{days}</ol>);
     },
     onChange: function() {
         this.setState(EventStore.getState());
