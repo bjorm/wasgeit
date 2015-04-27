@@ -12,7 +12,7 @@ sudo systemctl stop httpd
 sudo cp target/* /var/www/html/wasgeit
 
 # install backend
-cd ../../backend/src
+cd ../backend/src
 sudo cp -r *.py wasgeit.fcgi crawler /var/www/cgi-bin/wasgeit
 sudo chmod +x /var/www/cgi-bin/wasgeit/wasgeit.fcgi
 
