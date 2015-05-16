@@ -27,6 +27,7 @@
   "dependencies": {
     "flux": "^2.0.1",
     "lodash": "^3.8.0",
+    "moment": "^2.10.3",
     "react": "^0.13.1",
     "restful.js": "^0.6.1"
   }
