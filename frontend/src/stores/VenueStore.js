@@ -20,6 +20,10 @@ class VenueStore extends EventEmitter {
         return _.pluck(_.where(venues, { selected: true }), 'name');
     }
 
+    areAllVenuesVisible() {
+        return !_.find(venues, 'selected', false);
+    }
+
     emitChange() {
         this.emit(CHANGE_EVENT);
     }
@@ -36,15 +40,19 @@ class VenueStore extends EventEmitter {
 var venueStore = new VenueStore();
 
 venueStore.dispatchToken = AppDispatcher.register(function(action) {
-
+    // TODO refactor
     if (action.actionType === Actions.VENUE_CLICKED) {
+        venues.forEach((venue) => { _.set(venue, 'selected', false) });
         var clickedVenue = _.find(venues, 'name', action.id);
         if (clickedVenue) {
-            clickedVenue.selected = !clickedVenue.selected;
+            _.set(clickedVenue, 'selected', true);
             venueStore.emitChange();
         }
     } else if (action.actionType === Actions.VENUES_LOADED) {
         venues = action.venues.map((venue) => { return _.defaults(venue, { selected: true }); });
+        venueStore.emitChange();
+    } else if (action.actionType === Actions.VENUES_SHOW_ALL) {
+        venues.forEach((venue) => { _.set(venue, 'selected', true) });
         venueStore.emitChange();
     }
 });

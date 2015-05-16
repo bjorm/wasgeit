@@ -48,7 +48,8 @@ function filterEvents() {
 }
 
 AppDispatcher.register(function(action) {
-    if (action.actionType === Actions.VENUE_CLICKED) {
+    if (action.actionType === Actions.VENUE_CLICKED
+        || action.actionType === Actions.VENUES_SHOW_ALL) {
         AppDispatcher.waitFor([VenueStore.dispatchToken]);
         visibleEvents = filterEvents();
         eventStore.emitChange();

@@ -13,6 +13,10 @@ class VenueActions {
         });
 
     }
+
+    showAllVenues() {
+        AppDispatcher.dispatch({ actionType: Actions.VENUES_SHOW_ALL });
+    }
 }
 
 export default new VenueActions();
