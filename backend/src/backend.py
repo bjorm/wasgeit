@@ -1,39 +1,25 @@
-import datetime
-from flask import Flask, json, request
+from flask import Flask, request, json, Blueprint
 from agenda import Agenda
+from util import CustomJSONEncoder
 
+rest = Blueprint('rest', __name__, url_prefix="")
 
-class CustomJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        try:
-            if isinstance(obj, datetime.date):
-                return obj.isoformat()
-
-            iterable = iter(obj)
-        except TypeError:
-            pass
-        else:
-            return list(iterable)
-
-        return json.JSONEncoder.default(self, obj)
-
-
-app = Flask(__name__)
-app.json_encoder = CustomJSONEncoder
-
-agenda = Agenda()
-
-@app.route("/agenda")
+@rest.route("/agenda")
 def get_agenda():
     venue_ids_str = request.args.get('venues', '')
     venue_ids = set() if len(venue_ids_str) == 0 else {int(id_str) for id_str in venue_ids_str.split(',')}
 
     return json.dumps(agenda.get_events(venue_ids))
 
-@app.route("/venues")
+@rest.route("/venues")
 def get_venues():
     return json.dumps(agenda.get_venues())
 
+app = Flask(__name__)
+app.json_encoder = CustomJSONEncoder
+app.register_blueprint(rest)
+
+agenda = Agenda()
 
 if __name__ == "__main__":
     app.run(debug=True)

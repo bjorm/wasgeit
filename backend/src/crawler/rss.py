@@ -8,7 +8,6 @@ from crawler.base import RssCrawler
 class ISCCrawler(RssCrawler):
     def __init__(self):
         super().__init__()
-        self.id = 1
         self.url = "http://www.isc-club.ch/programm?rss"
         self.name = "ISC"
 
@@ -33,7 +32,6 @@ class ISCCrawler(RssCrawler):
 class DachstockCrawler(RssCrawler):
     def __init__(self):
         super().__init__()
-        self.id = 2
         self.url = "http://www.dachstock.ch/rss.xml"
         self.name = "Dachstock"
 

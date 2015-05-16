@@ -8,7 +8,6 @@ from crawler.base import HtmlCrawler
 class KairoCrawler(HtmlCrawler):
     def __init__(self):
         super().__init__()
-        self.id = 3
         self.url = "http://www.cafe-kairo.ch/kultur"
         self.name = "Cafe Kairo"
 

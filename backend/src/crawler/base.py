@@ -11,9 +11,12 @@ from pyquery import PyQuery as Pq
 
 
 class VenueCrawler(object):
+    _event_id = 0
+    _venue_id = 0
+
     def __init__(self):
         # TODO push venue details into dict
-        self.id = None
+        self.id = VenueCrawler._get_next_venue_id()
         self.file = None
         self.name = None
         self.url = None
@@ -32,7 +35,19 @@ class VenueCrawler(object):
         if event['date'] >= date.today():
             date_str = event['date'].isoformat()
             event['venue'] = self.name
+            event['id'] = self._get_next_event_id()
             self.entries[date_str].append(event)
+
+    @staticmethod
+    def _get_next_event_id():
+        VenueCrawler._event_id += 1
+        return VenueCrawler._event_id
+
+    @staticmethod
+    def _get_next_venue_id():
+        """Venues are not created by multiple threads hence no lock."""
+        VenueCrawler._venue_id += 1
+        return VenueCrawler._venue_id
 
 
 class HtmlCrawler(VenueCrawler):
@@ -57,8 +72,10 @@ class HtmlCrawler(VenueCrawler):
 
 
 class FacebookEventsCrawler(HtmlCrawler):
-    def __init__(self):
+    def __init__(self, name, url):
         super().__init__()
+        self.name = name
+        self.url = url
 
     def consume(self, data):
         # TODO clean up

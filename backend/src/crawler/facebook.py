@@ -1,77 +1,14 @@
 from crawler.base import FacebookEventsCrawler
 
-
-class PlaygroundLoungeCrawler(FacebookEventsCrawler):
-    def __init__(self):
-        super().__init__()
-        self.url = "https://www.facebook.com/playgroundlounge/events?key=events"
-        self.id = 4
-        self.name = "Playground Lounge"
-
-
-class BrasserieLorraineCrawler(FacebookEventsCrawler):
-    def __init__(self):
-        super().__init__()
-        self.url = "https://www.facebook.com/pages/Genossenschaft-Restaurant-Brasserie-Lorraine/106714019391041?sk=events&ref=page_internal"
-        self.id = 5
-        self.name = "Brasserie Lorraine"
-
-
-class DeanWakeCrawler(FacebookEventsCrawler):
-    def __init__(self):
-        super().__init__()
-        self.url = "https://www.facebook.com/pages/Dean-Wake/113178252085227?sk=events&key=events"
-        self.id = 6
-        self.name = "Dean Wake"
-
-
-class TurnhalleCrawler(FacebookEventsCrawler):
-    def __init__(self):
-        super().__init__()
-        self.url = "https://www.facebook.com/turnhalle.ch/events?ref=page_internal"
-        self.id = 7
-        self.name = "Turnhalle"
-
-
-class KofmehlCrawler(FacebookEventsCrawler):
-    def __init__(self):
-        super().__init__()
-        self.url = "https://www.facebook.com/tschieh/events?ref=page_internal"
-        self.id = 8
-        self.name = "Kofmehl"
-
-
-class CoqDorCrawler(FacebookEventsCrawler):
-    def __init__(self):
-        super().__init__()
-        self.url = "https://www.facebook.com/Coq.d.Or/events?ref=page_internal"
-        self.id = 9
-        self.name = "Coq d'Or"
-
-
-class KiffCrawler(FacebookEventsCrawler):
-    def __init__(self):
-        super().__init__()
-        self.url = "https://www.facebook.com/kiffaarau/events?ref=page_internal"
-        self.id = 10
-        self.name = "KiFF"
-
-
-class FriSonCrawler(FacebookEventsCrawler):
-    def __init__(self):
-        super().__init__()
-        self.url = "https://www.facebook.com/frisonclub/events?ref=page_internal"
-        self.id = 11
-        self.name = "Fri-Son"
-
-
-crawlers = [
-    PlaygroundLoungeCrawler(),
-    BrasserieLorraineCrawler(),
-    DeanWakeCrawler(),
-    TurnhalleCrawler(),
-    KofmehlCrawler(),
-    CoqDorCrawler(),
-    KiffCrawler(),
-    FriSonCrawler()
+_venues = [
+    {"name": "Playground Lounge", "url": "https://www.facebook.com/playgroundlounge/events?key=events"},
+    {"name": "Brasserie Lorraine", "url": "https://www.facebook.com/pages/Genossenschaft-Restaurant-Brasserie-Lorraine/106714019391041?sk=events&ref=page_internal"},
+    {"name": "Dean Wake", "url": "https://www.facebook.com/pages/Dean-Wake/113178252085227?sk=events&key=events"},
+    {"name": "Turnhalle", "url": "https://www.facebook.com/turnhalle.ch/events?ref=page_internal"},
+    {"name": "Kofmehl", "url": "https://www.facebook.com/tschieh/events?ref=page_internal"},
+    {"name": "Coq d'Or", "url": "https://www.facebook.com/Coq.d.Or/events?ref=page_internal"},
+    {"name": "KiFF", "url": "https://www.facebook.com/kiffaarau/events?ref=page_internal"},
+    {"name": "Fri-Son", "url": "https://www.facebook.com/frisonclub/events?ref=page_internal"},
 ]
+
+crawlers = [FacebookEventsCrawler(venue["name"], venue["url"]) for venue in _venues]
