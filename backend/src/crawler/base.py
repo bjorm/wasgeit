@@ -40,6 +40,7 @@ class VenueCrawler(object):
 
     @staticmethod
     def _get_next_event_id():
+        """Events are not created by multiple threads hence no lock."""
         VenueCrawler._event_id += 1
         return VenueCrawler._event_id
 
@@ -86,7 +87,7 @@ class FacebookEventsCrawler(HtmlCrawler):
 
     def _analyze_dom(self, event_timeline):
         # TODO clean up
-        event_items = [Pq(event) for event in event_timeline.find('table').filter(self.is_timeline_event)]
+        event_items = [Pq(event) for event in event_timeline.find('div > ul > li')]
         for event in event_items:
             event_element = event.find('div > a[data-hovercard]')
             title = event_element.text()
@@ -95,10 +96,6 @@ class FacebookEventsCrawler(HtmlCrawler):
             event_date = self._create_date(day_month_str)
             link = self._create_link(event_url_path_segment)
             self.add_event({'title': title, 'date': event_date.date(), 'link': link})
-
-    @staticmethod
-    def is_timeline_event(id, element):
-        return element.attrib.get('id', '').startswith('timeline_event_item')
 
     @staticmethod
     def _create_link(path):
