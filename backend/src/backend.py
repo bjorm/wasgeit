@@ -1,8 +1,10 @@
 from flask import Flask, request, json, Blueprint
 from agenda import Agenda
 from util import CustomJSONEncoder
+import logging
 
 rest = Blueprint('rest', __name__, url_prefix="")
+
 
 @rest.route("/agenda")
 def get_agenda():
@@ -11,9 +13,12 @@ def get_agenda():
 
     return json.dumps(agenda.get_events(venue_ids))
 
+
 @rest.route("/venues")
 def get_venues():
     return json.dumps(agenda.get_venues())
+
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 app.json_encoder = CustomJSONEncoder
