@@ -4,6 +4,7 @@ import re
 from collections import defaultdict
 from datetime import date
 import locale
+import logging
 
 import feedparser
 from lxml import html
@@ -14,13 +15,14 @@ class VenueCrawler(object):
     _event_id = 0
     _venue_id = 0
 
-    def __init__(self):
+    def __init__(self, name, url):
         # TODO push venue details into dict
         self.id = VenueCrawler._get_next_venue_id()
         self.file = None
-        self.name = None
-        self.url = None
+        self.name = name
+        self.url = url
         self.entries = defaultdict(list)
+        self.log = logging.getLogger(name)
 
     def get_events(self):
         return self.entries
@@ -52,8 +54,8 @@ class VenueCrawler(object):
 
 
 class HtmlCrawler(VenueCrawler):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name, url):
+        super().__init__(name, url)
         self.timeout = 60
 
     def load_url(self, url):
@@ -74,9 +76,7 @@ class HtmlCrawler(VenueCrawler):
 
 class FacebookEventsCrawler(HtmlCrawler):
     def __init__(self, name, url):
-        super().__init__()
-        self.name = name
-        self.url = url
+        super().__init__(name, url)
 
     def consume(self, data):
         # TODO clean up
@@ -108,8 +108,8 @@ class FacebookEventsCrawler(HtmlCrawler):
 
 
 class RssCrawler(VenueCrawler):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name, url):
+        super().__init__(name, url)
 
     def consume(self, data):
         for entry in data.entries:

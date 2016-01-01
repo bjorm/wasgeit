@@ -7,9 +7,7 @@ from crawler.base import HtmlCrawler
 
 class KairoCrawler(HtmlCrawler):
     def __init__(self):
-        super().__init__()
-        self.url = "http://www.cafe-kairo.ch/kultur"
-        self.name = "Cafe Kairo"
+        super().__init__("Cafe Kairo", "http://www.cafe-kairo.ch/kultur")
 
     def _analyze_dom(self, d):
         for article in d("article"):
@@ -19,12 +17,11 @@ class KairoCrawler(HtmlCrawler):
             if event_date is not None:
                 self.add_event({'title': title, 'date': event_date, 'link': url})
 
-    @staticmethod
-    def _parse_date(date_str):
+    def _parse_date(self, date_str):
         try:
             return datetime.strptime(date_str, '%d.%m.%Y').date()
         except ValueError as exc:
-            print(exc)
+            self.log.error(exc)
             return None
 
     def _build_url(self, node_id):
