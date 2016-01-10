@@ -1,4 +1,5 @@
 from datetime import datetime
+import locale
 
 from pyquery import PyQuery as Pq
 
@@ -28,4 +29,27 @@ class KairoCrawler(HtmlCrawler):
         return "{}#{}".format(self.url, node_id)
 
 
-crawlers = [KairoCrawler()]
+class TurnhalleCrawler(HtmlCrawler):
+    def __init__(self):
+        super().__init__("Turnhalle", "http://www.turnhalle.ch")
+
+    def _analyze_dom(self, d):
+        locale.setlocale(locale.LC_TIME, 'de_CH')
+
+        for event in d(".event-inner-header"):
+            title = "{}: {}".format(Pq(event).find("h1").text(), Pq(event).find("h2").text())
+            url = self.url
+            event_date = self._parse_date(Pq(event).find("h3").text())
+            if event_date is not None:
+                self.add_event({"title": title, "date": event_date, "url": url})
+
+    def _parse_date(self, full_date_string):
+        event_date_str = full_date_string.split("|")[1].strip()
+        try:
+            return datetime.strptime(event_date_str, '%d. %B %Y').date()
+        except ValueError as exc:
+            self.log.error(exc)
+            return None
+
+
+crawlers = [KairoCrawler(), TurnhalleCrawler()]
