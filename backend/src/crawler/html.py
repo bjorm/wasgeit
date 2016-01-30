@@ -38,10 +38,11 @@ class TurnhalleCrawler(HtmlCrawler):
 
         for event in d(".event-inner-header"):
             title = "{}: {}".format(Pq(event).find("h1").text(), Pq(event).find("h2").text())
-            url = self.url
+            dom_id = d(event).parent().parent().attr('id')
+            link = "{}#{}".format(self.url, dom_id)
             event_date = self._parse_date(Pq(event).find("h3").text())
             if event_date is not None:
-                self.add_event({"title": title, "date": event_date, "url": url})
+                self.add_event({"title": title, "date": event_date, "link": link})
 
     def _parse_date(self, full_date_string):
         event_date_str = full_date_string.split("|")[1].strip()
