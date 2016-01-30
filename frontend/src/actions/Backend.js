@@ -1,3 +1,5 @@
-import restful from 'restful.js';
+import 'whatwg-fetch';
+import restful, { fetchBackend } from 'restful.js';
 
-module.exports = restful(location.host).prefixUrl('rest');
+const api = restful('http://' + location.host + '/rest', fetchBackend(fetch));
+export default api;

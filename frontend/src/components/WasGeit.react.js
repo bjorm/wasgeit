@@ -1,8 +1,8 @@
-var React = require('react');
+import React from 'react';
 
-var VenueList = require('./VenueList.react');
-var Agenda = require('./Agenda.react');
-var ShowAll = require('./ShowAll.react');
+import VenueList from './VenueList.react';
+import Agenda from './Agenda.react';
+import ShowAll from './ShowAll.react';
 
 var WasGeit = React.createClass({
     render: function() {
@@ -10,4 +10,4 @@ var WasGeit = React.createClass({
     }
 });
 
-module.exports = WasGeit;
+export default WasGeit;

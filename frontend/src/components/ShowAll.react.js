@@ -1,7 +1,7 @@
-var React = require('react');
-var _ = require('lodash');
-var VenueStore = require('../stores/VenueStore');
-var VenueActions = require('../actions/VenueActions');
+import React from 'react';
+import _ from 'lodash';
+import VenueStore from '../stores/VenueStore';
+import VenueActions from '../actions/VenueActions';
 
 var Event = React.createClass({
     getInitialState: function() {
@@ -33,4 +33,4 @@ var Event = React.createClass({
     }
 });
 
-module.exports = Event;
+export default Event;

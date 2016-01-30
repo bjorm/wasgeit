@@ -1,15 +1,15 @@
-var React = require('react');
-var _ = require('lodash');
+import React from 'react';
+import _ from 'lodash';
 
-var EventStore = require('../stores/EventStore');
-var EventActions = require('../actions/EventActions');
-var Day = require('./Day.react');
+import EventStore from '../stores/EventStore';
+import EventActions from '../actions/EventActions';
+import Day from './Day.react';
 
 var Agenda = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return EventStore.getState();
     },
-    componentDidMount: function() {
+    componentDidMount: function () {
         EventStore.addChangeListener(this.onChange);
         EventActions.loadEvents();
     },
@@ -17,15 +17,15 @@ var Agenda = React.createClass({
         EventStore.removeChangeListener(this.onChange);
     },
     render: function() {
-        var days = [];
+        let days = [];
         _.forOwn(this.state.events, function(events, date) {
             days.push(<Day key={date} date={date} events={events} />);
         });
-        return (<ol className={'list-unstyled'}>{days}</ol>);
+        return (<ol className={'list-unstyled'}>{_.sortBy(days, (day) => day.key)}</ol>);
     },
-    onChange: function() {
+    onChange: function () {
         this.setState(EventStore.getState());
     }
 });
 
-module.exports = Agenda;
+export default Agenda;

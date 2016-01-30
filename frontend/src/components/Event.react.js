@@ -1,5 +1,5 @@
-var React = require('react');
-var _ = require('lodash');
+import React from 'react';
+import _ from 'lodash';
 
 var Event = React.createClass({
     render: function() {
@@ -14,4 +14,4 @@ var Event = React.createClass({
     }
 });
 
-module.exports = Event;
+export default Event;

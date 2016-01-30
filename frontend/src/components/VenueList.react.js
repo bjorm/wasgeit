@@ -1,7 +1,7 @@
-var React = require('react');
-var VenueStore = require('../stores/VenueStore');
-var Venue = require('./Venue.react');
-var VenueActions = require('../actions/VenueActions');
+import React from 'react';
+import VenueStore from '../stores/VenueStore';
+import Venue from './Venue.react';
+import VenueActions from '../actions/VenueActions';
 
 var VenueList = React.createClass({
     getInitialState: function() {
@@ -19,11 +19,11 @@ var VenueList = React.createClass({
         this.state.venues.forEach((venue) => {
             venues.push(<Venue key={venue.id} venue={venue} />);
         });
-        return (<ul className={'nav nav-pills'}>{venues}</ul>);
+        return <ul className={'nav nav-pills'}>{venues}</ul>;
     },
     _onChange: function() {
         this.setState(VenueStore.getState());
     }
 });
 
-module.exports = VenueList;
+export default VenueList;

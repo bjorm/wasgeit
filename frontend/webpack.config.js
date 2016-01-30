@@ -1,5 +1,6 @@
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var webpack = require('webpack');
+require('es6-promise').polyfill();
 
 module.exports = {
     entry: './src/index.react.js',
@@ -16,7 +17,7 @@ module.exports = {
                 loader: "url-loader?limit=10000&minetype=application/font-woff"
             },
             {test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader"},
-            {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
+            {test: /\.js$/, exclude: /node_modules/, loader: 'babel', query: { presets: ['react', 'es2015'] } }
         ]
     },
     resolve: {

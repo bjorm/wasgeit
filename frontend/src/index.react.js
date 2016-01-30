@@ -1,8 +1,11 @@
-var React = require('react');
-var WasGeit = require('./components/WasGeit.react');
+import ReactDOM from 'react-dom';
+import WasGeit from './components/WasGeit.react';
 
-require('./style/css/bootstrap.min.css');
-require('./style/style.less');
-require('file?name=index.html!./index.html');
+import React from 'react';
 
-React.render(<WasGeit />, document.getElementById("wasgeit"));
+import './style/css/bootstrap.min.css';
+import './style/style.less';
+import 'file?name=index.html!./index.html';
+
+
+ReactDOM.render(<WasGeit />, document.getElementById("wasgeit"));
