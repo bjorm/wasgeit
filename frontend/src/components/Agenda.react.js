@@ -21,7 +21,9 @@ var Agenda = React.createClass({
         _.forOwn(this.state.events, function(events, date) {
             days.push(<Day key={date} date={date} events={events} />);
         });
-        return (<ol className={'list-unstyled'}>{_.sortBy(days, (day) => day.key)}</ol>);
+        return (<ol className={'list-unstyled'}>
+            { _.sortBy(days, day => day.key) }
+        </ol>);
     },
     onChange: function () {
         this.setState(EventStore.getState());
