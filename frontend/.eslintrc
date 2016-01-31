@@ -1,7 +1,8 @@
 {
-  "settings": {
-    "ecmascript": 6,
+  "ecmaFeatures": {
+    "modules": true,
     "jsx": true,
-    "quotes": [1, "single"]
-  }
+    "arrowFunctinos": true
+  },
+  "quotes": [1, "single"]
 }
