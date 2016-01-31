@@ -3,7 +3,7 @@ from agenda import Agenda
 from util import CustomJSONEncoder
 import logging
 
-rest = Blueprint('rest', __name__, url_prefix="")
+rest = Blueprint('rest', __name__, url_prefix="/rest")
 
 
 @rest.route("/agenda")

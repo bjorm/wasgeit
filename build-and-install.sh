@@ -5,16 +5,9 @@ npm install
 # build frontend
 node node_modules/webpack/bin/webpack.js
 
-# prepare install
-sudo systemctl stop httpd
+cd ..
 
-# install frontend
-sudo cp target/* /var/www/html/wasgeit
-
-# install backend
-cd ../backend/src
-sudo cp -r *.py wasgeit.fcgi crawler /var/www/cgi-bin/wasgeit
-sudo chmod +x /var/www/cgi-bin/wasgeit/wasgeit.fcgi
-
-# start apache
-sudo systemctl start httpd
+docker build -t wasgeit . && \
+    docker stop wasgeit && \
+    docker rm wasgeit && \
+    docker run -dp 80:8080 --name wasgeit wasgeit

@@ -2,22 +2,29 @@ FROM debian:jessie
 #USER nobody
 #WORKDIR
 
-RUN apt-get update && apt-get install -y nginx python3 python3-pip gcc libxml2-dev libxslt-dev zlib1g-dev
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
-RUN pip3 install virtualenv
+COPY docker/locale.gen /etc/
 
-RUN mkdir -p /var/www/wasgeit/backend && \
-    cd /var/www/wasgeit/backend && \
-    virtualenv python3-wasgeit && \
-    . python3-wasgeit/bin/activate && \
-    pip install flask pyquery feedparser uwsgi
+RUN apt-get update && apt-get install -y nginx python3 python3-pip gcc libxml2-dev libxslt-dev zlib1g-dev locales
 
-COPY ../backend /var/www/wasgeit/backend
+RUN pip3 install flask pyquery feedparser uwsgi
 
-COPY wasgeit_nginx.conf /var/www/wasgeit
-COPY uwsgi_params /var/www/wasgeit/backend
+RUN mkdir -p /var/www/wasgeit/backend
+
+COPY backend/src /var/www/wasgeit/backend
+
+COPY frontend/target /var/www/wasgeit/static
+
+COPY docker /var/www/wasgeit
+
+RUN chmod +x /var/www/wasgeit/start.sh
 
 RUN ln -s /var/www/wasgeit/wasgeit_nginx.conf /etc/nginx/conf.d/
 
-CMD nginx
+#RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+
 EXPOSE 8080
+CMD ["/var/www/wasgeit/start.sh"]

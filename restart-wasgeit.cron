@@ -1,2 +1,6 @@
-# touching ini file will cause uwsgi emperor to reload wasgeit vassal
-docker exec wasgeit touch /var/www/wasgeit/backend/wasgeit.ini
+# Sending "r" to uwsgi master-fifo will gracefully reload our wsgi process,
+# thereby recrawling all the sites and events.
+#
+# See http://uwsgi-docs.readthedocs.org/en/latest/MasterFIFO.html#the-master-fifo
+ª
+docker exec wasgeit sh -c 'echo "r" > /tmp/wasgeit-fifo'
