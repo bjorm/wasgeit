@@ -1,0 +1,2 @@
+# touching ini file will cause uwsgi emperor to reload wasgeit vassal
+docker exec wasgeit touch /var/www/wasgeit/backend/wasgeit.ini

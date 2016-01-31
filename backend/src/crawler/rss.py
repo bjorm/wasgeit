@@ -19,7 +19,7 @@ class ISCCrawler(RssCrawler):
         else:
             pat = re.compile("(\d{2})\.(\d{2})")
             match = pat.sub("\g<1>:\g<2>", result.group(1))
-            locale.setlocale(locale.LC_TIME, 'de_CH')
+            locale.setlocale(locale.LC_TIME, 'de_CH.UTF-8')
             for month_pattern in ['%b', '%B']:
                 try:
                     date_format = '%d. {} %Y | %H:%M'.format(month_pattern)

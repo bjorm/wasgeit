@@ -103,7 +103,7 @@ class FacebookEventsCrawler(HtmlCrawler):
 
     @staticmethod
     def _create_date(day_month_str):
-        locale.setlocale(locale.LC_TIME, 'en_US')
+        locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
         return datetime.strptime('{} {}'.format(day_month_str, date.today().year), '%d %b %Y')
 
 

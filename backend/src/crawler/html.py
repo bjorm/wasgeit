@@ -34,7 +34,7 @@ class TurnhalleCrawler(HtmlCrawler):
         super().__init__("Turnhalle", "http://www.turnhalle.ch")
 
     def _analyze_dom(self, d):
-        locale.setlocale(locale.LC_TIME, 'de_CH')
+        locale.setlocale(locale.LC_TIME, 'de_CH.UTF-8')
 
         for event in d(".event-inner-header"):
             title = "{}: {}".format(Pq(event).find("h1").text(), Pq(event).find("h2").text())
