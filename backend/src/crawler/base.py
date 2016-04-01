@@ -1,14 +1,13 @@
 import urllib
-from datetime import datetime
-import re
 from collections import defaultdict
 from datetime import date
-import locale
 import logging
 
 import feedparser
 from lxml import html
 from pyquery import PyQuery as Pq
+
+# TODO introduce class for events
 
 
 class VenueCrawler(object):
@@ -38,7 +37,10 @@ class VenueCrawler(object):
             date_str = event['date'].isoformat()
             event['venue'] = self.name
             event['id'] = self._get_next_event_id()
+            self.log.debug("Added event to agenda: '{}'".format(event))
             self.entries[date_str].append(event)
+        else:
+            self.log.debug("Discarded event because it happens in the past: '{}'".format(event))
 
     @staticmethod
     def _get_next_event_id():
@@ -74,37 +76,6 @@ class HtmlCrawler(VenueCrawler):
         pass
 
 
-class FacebookEventsCrawler(HtmlCrawler):
-    def __init__(self, name, url):
-        super().__init__(name, url)
-
-    def consume(self, data):
-        # TODO clean up
-        hidden_markup = re.compile("<!-- (.*TimelineSection.*) -->")
-        match = re.search(hidden_markup, data.decode('utf-8'))
-        event_timeline = Pq(match.group(1))
-        self._analyze_dom(event_timeline)
-
-    def _analyze_dom(self, event_timeline):
-        # TODO clean up
-        event_items = [Pq(event) for event in event_timeline.find('div > ul > li')]
-        for event in event_items:
-            event_element = event.find('div > a[data-hovercard]')
-            title = event_element.text()
-            event_url_path_segment = event_element.attr['href']
-            day_month_str = event.find('td:first > div').text()
-            event_date = self._create_date(day_month_str)
-            link = self._create_link(event_url_path_segment)
-            self.add_event({'title': title, 'date': event_date.date(), 'link': link})
-
-    @staticmethod
-    def _create_link(path):
-        return "{}{}".format("http://facebook.com", path)
-
-    @staticmethod
-    def _create_date(day_month_str):
-        locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
-        return datetime.strptime('{} {}'.format(day_month_str, date.today().year), '%d %b %Y')
 
 
 class RssCrawler(VenueCrawler):

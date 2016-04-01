@@ -10,7 +10,7 @@ COPY docker/locale.gen /etc/
 
 RUN apt-get update && apt-get install -y nginx python3 python3-pip gcc libxml2-dev libxslt-dev zlib1g-dev locales
 
-RUN pip3 install flask pyquery feedparser uwsgi
+RUN pip3 install flask pyquery feedparser uwsgi facepy
 
 RUN mkdir -p /var/www/wasgeit/backend
 
