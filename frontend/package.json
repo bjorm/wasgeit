@@ -32,7 +32,7 @@
     "moment": "^2.10.3",
     "react": "0.14.7",
     "react-dom": "0.14.7",
-    "restful.js": "0.9.4",
+    "restful.js": "0.9.6",
     "whatwg-fetch": "0.11.0"
   }
 }
