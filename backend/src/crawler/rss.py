@@ -31,9 +31,4 @@ class ISCCrawler(RssCrawler):
             return None
 
 
-class DachstockCrawler(RssCrawler):
-    def __init__(self):
-        super().__init__("Dachstock", "http://www.dachstock.ch/rss.xml")
-
-
-crawlers = [ISCCrawler(), DachstockCrawler()]
+crawlers = [ISCCrawler()]
