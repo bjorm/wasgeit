@@ -64,7 +64,7 @@ class HtmlCrawler(VenueCrawler):
         return urllib.request.urlopen(url, timeout=self.timeout).read()
 
     def get_future(self, executor):
-        req = urllib.request.Request(self.url, headers={'Accept-Language': 'en-US,en;q=0.5'})
+        req = urllib.request.Request(self.url, headers={'Accept-Language': 'en-US,en;q=0.5','User-Agent': 'Mozilla/5.0'})
         return executor.submit(self.load_url, req)
 
     def consume(self, data):
@@ -74,8 +74,6 @@ class HtmlCrawler(VenueCrawler):
 
     def _analyze_dom(self, d):
         pass
-
-
 
 
 class RssCrawler(VenueCrawler):

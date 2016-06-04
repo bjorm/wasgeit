@@ -1,5 +1,5 @@
-from datetime import datetime
 import locale
+from datetime import datetime
 
 from pyquery import PyQuery as Pq
 
@@ -53,4 +53,43 @@ class TurnhalleCrawler(HtmlCrawler):
             return None
 
 
-crawlers = [KairoCrawler(), TurnhalleCrawler()]
+class DachstockCrawler(HtmlCrawler):
+    def __init__(self):
+        super().__init__("Dachstock", "https://www.dachstock.ch")
+
+    def _analyze_dom(self, d):
+        for event in d(".em-eventlist-event"):
+            event = Pq(event)
+            title = event.find("h3").text()
+            event_date = self._parse_date(event.find(".em-eventlist-date").text()[5:].split("-")[0].strip())
+            link = ""
+            self.add_event({"title": title, "date": event_date, "link": link})
+
+    def _parse_date(self, full_date_string):
+        try:
+            return datetime.strptime(full_date_string, "%d.%m %Y").date()
+        except ValueError as exc:
+            self.log.error(exc)
+
+
+class RoessliCrawler(HtmlCrawler):
+    def __init__(self):
+        super().__init__("Rössli", "https://www.souslepont-roessli.ch/")
+
+    def _analyze_dom(self, d):
+        locale.setlocale(locale.LC_TIME, 'de_CH.UTF-8')
+
+        for event in d(".page-rossli-events").find(".event"):
+            event = Pq(event)
+            title = event.find("h2").text()
+            link = event.find("a").attr("href")
+            event_date = self._parse_date(event.find("time").text())
+            self.add_event({"title": title, "date": event_date, "link": link})
+
+    @staticmethod
+    def _parse_date(full_date_string):
+        event_date_str = full_date_string.split(",")[1].strip()
+        return datetime.strptime(event_date_str, '%d. %b %Y').date()
+
+
+crawlers = [DachstockCrawler(), RoessliCrawler(), KairoCrawler(), TurnhalleCrawler()]
